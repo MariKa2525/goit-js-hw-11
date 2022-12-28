@@ -24,7 +24,7 @@ body {
 }
 
 .search-form {
-  background-color: rgba(5, 45, 250, 0.808);
+  background-color: rgba(154, 39, 192, 0.808);
   height: 60px;
   
 }
@@ -42,12 +42,15 @@ button {
   font-size: 24px;
   border-radius: 4px;
   border: 0;
-  background-color: #39264bfe;
+  background-color: #c9c5cdfe;
   cursor: pointer;
-  color: #fff;
+  color: black;
   box-shadow: 0px 4px 4px rgb(0 0 0 / 15%);
   margin-top: 15px;
 }
+
+
+
 
 button:hover {
   transform: scale(1.03);

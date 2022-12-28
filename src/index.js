@@ -12,10 +12,10 @@ const refs = {
 
 let searchQuery = '';
 let gallery = new SimpleLightbox('.gallery a');
-let loading = false;
 
 refs.searchForm.addEventListener('submit', onSearch);
 // refs.loadMoreBtn.addEventListener('click', onLoadMore);
+
 window.addEventListener('scroll', onScroll)
 
 disabledBtn()
@@ -31,7 +31,6 @@ function onSearch(evt) {
 }
 
 async function showData(arrdata) {
-    loading = true;
     try {
         const data = await fetchImages(searchQuery, true);
         const hits = data.hits;
@@ -55,6 +54,7 @@ async function showData(arrdata) {
     } 
     clearGalleryList();
     addToGallery(hits);
+    
     // removeBtn();
 
     new SimpleLightbox('.gallery a', {
@@ -65,7 +65,6 @@ async function showData(arrdata) {
     console.log("Erorr", error);
     } finally {
         refs.searchForm.reset();
-        loading = false
     }
 }
 
@@ -78,22 +77,28 @@ function disabledBtn() {
 // }
 
 async function onScroll() {
-    if(loading === false) {
-        const documentRect = document.documentElement.getBoundingClientRect()
-        if(documentRect.bottom < document.documentElement.clientHeight + 200) {
-                const {hits, totalHits} = await fetchImages(searchQuery)
-                addToGallery(hits)
-                Notiflix.Notify.success(
-                    `"Hooray! We found ${totalHits} images."`
+        const heightUser = window.screen.height;
+        const {height} = document.documentElement.getBoundingClientRect()
+        const topScroll = document.documentElement.scrollTop
+  
+        if(topScroll > (height - heightUser) ) {
+
+            window.removeEventListener('scroll', onScroll)
+            const {hits, totalHits} = await fetchImages(searchQuery)
+            addToGallery(hits)
+            Notiflix.Notify.success(
+                `"Hooray! We found ${totalHits} images."`
+            )
+            gallery.refresh();
+            window.addEventListener('scroll', onScroll)
+
+            if (!hits.length) {
+                Notiflix.Notify.warning(
+                    "We're sorry, but you've reached the end of search results."
                 )
-                gallery.refresh()
-                if (!hits.length) {
-                    Notiflix.Notify.warning(
-                        "We're sorry, but you've reached the end of search results."
-                    )
-                }
             }
-    }
+            }
+
     
 }
 
