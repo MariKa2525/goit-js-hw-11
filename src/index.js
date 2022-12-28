@@ -24,7 +24,6 @@ function onSearch(evt) {
     evt.preventDefault();
     searchQuery = evt.currentTarget.elements.searchQuery.value;
     if (searchQuery === '') {
-        refs.searchForm.textContent = '';
             return;
         }
     showData();
